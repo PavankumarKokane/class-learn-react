@@ -1,11 +1,7 @@
-import React, { Component } from "react";
-import NavBar from "./components/NavBar";
-import NewItem from "./components/NewItem";
-import "./App.css";
-
-export default class App extends Component {
-  render() {
-    let articles = [
+{
+    "status": "ok",
+    "totalResults": 10,
+    "articles": [
       {
         "source": {
           "id": "techcrunch",
@@ -136,23 +132,5 @@ export default class App extends Component {
         "publishedAt": "2023-10-03T18:31:56Z",
         "content": "Sam Altman, Peak XV, Eric Schmidt’s trust, and Daniel Gross and Nat Friedman’s AI grant are among backers of an AI startup, founded by two teenagers, that’s aiming to assist businesses in automating … [+3416 chars]"
       }
-    ];
-
-    return (
-      <>
-        <NavBar />
-        <div className="mt-5">
-          <div className="container">
-            <div className="new-item-list">
-              {articles.map((article, i) => (
-                <div className="news-item" key={i}>
-                  <NewItem title={article.title} description={article.description} url={article.url} img_url={article.urlToImage} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </>
-    );
+    ]
   }
-}
