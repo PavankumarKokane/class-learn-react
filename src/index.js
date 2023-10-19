@@ -8,11 +8,38 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import AboutUs from './components/AboutUs';
+import Blog from './components/Blog';
+import News from './components/News';
+import AndroidNews from './components/AndroidNews';
+import Crypto from './components/Crypto';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />
+    element: <App />,
+    children: [
+      {
+        path: "/",
+        element: <News />,
+      },
+      {
+        path: "/about",
+        element: <AboutUs />,
+      },
+      {
+        path: "/blog",
+        element: <Blog />,
+      },
+      {
+        path: "/android",
+        element: <AndroidNews />,
+      },
+      {
+        path: "/crypto",
+        element: <Crypto />,
+      }
+    ]
   }
 ]);
 

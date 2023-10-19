@@ -21,8 +21,13 @@ export default class NavBar extends Component {
           <div className="collapse navbar-collapse" id="collapsibleNavbar">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link" to="/">
-                  Home
+                <Link className="nav-link" to="/android">
+                  AndroidNews
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/crypto">
+                Crypto
                 </Link>
               </li>
               <li className="nav-item">
