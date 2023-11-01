@@ -9,7 +9,7 @@ export default class App extends Component {
     return (
       <>
         <NavBar />
-        <div className="container mt-5">
+        <div className="container mt-5 mb-5">
           <Outlet />
         </div>
       </>
