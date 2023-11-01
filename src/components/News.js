@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NewItem from "./NewItem";
+import LoadingBar from 'react-top-loading-bar';
 
 export default class News extends Component {
   constructor(props) {
@@ -8,15 +9,18 @@ export default class News extends Component {
       articles: [],
       page: 1,
       totalResults: 0,
+      loadingProgress: 0
     };
   }
 
   async componentDidMount() {
+    this.loadingBar.continuousStart(5,5);
     let url =
       `https://newsapi.org/v2/top-headlines?country=in&apiKey=8dee27e421e249e3a3e6678f7681c4a8&pageSize=12&page=${this.state.page}`;
     let data = await fetch(url);
     let parsedata = await data.json();
     this.setState({ articles: parsedata.articles, totalResults: parsedata.totalResults });
+    this.loadingBar.complete();
   }
 
   handlerNextClick = () => {
@@ -28,16 +32,24 @@ export default class News extends Component {
   }
 
   getData = async (nopage) => {
+      this.loadingBar.continuousStart(5,5);
       let url =
       `https://newsapi.org/v2/top-headlines?country=in&apiKey=8dee27e421e249e3a3e6678f7681c4a8&pageSize=12&page=${nopage}`;
       let data = await fetch(url);
       let parsedata = await data.json();
       this.setState({ articles: parsedata.articles, totalResults: parsedata.totalResults,page: nopage });
       console.log("Get Data For Page" + this.state.page + " totalResults" + this.state.totalResults);
+      this.loadingBar.complete();
   }
 
   render() {
     return (
+      <>
+      <LoadingBar
+        height={3}
+        color="#f00"
+        ref={(ref) => (this.loadingBar = ref)}
+      />
       <div className="mt-5">
         <div className="container">
           <div className="new-item-list">
@@ -58,6 +70,7 @@ export default class News extends Component {
           </div>
         </div>
       </div>
+      </>
     );
   }
 }
