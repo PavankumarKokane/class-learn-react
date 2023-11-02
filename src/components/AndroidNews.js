@@ -9,14 +9,16 @@ export default class AndroidNews extends Component {
       articles: [],
       page: 1,
       totalResults: 0,
-      loadingProgress: 0
+      loadingProgress: 0,
+      type: props.type ? props.type : "general"
     };
   }
 
   async componentDidMount() {
+    console.log(this.state.type);
     this.loadingBar.continuousStart(5,5);
     let url =
-      `https://newsapi.org/v2/everything?q=android&apiKey=8dee27e421e249e3a3e6678f7681c4a8&pageSize=12&page=${this.state.page}`;
+      `https://newsapi.org/v2/everything?q=${this.state.type}&apiKey=8dee27e421e249e3a3e6678f7681c4a8&pageSize=12&page=${this.state.page}`;
       let data = await fetch(url);
       let parsedata = await data.json();
       this.setState({ articles: parsedata.articles, totalResults: parsedata.totalResults });

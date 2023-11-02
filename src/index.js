@@ -11,8 +11,6 @@ import {
 import AboutUs from './components/AboutUs';
 import Blog from './components/Blog';
 import News from './components/News';
-import AndroidNews from './components/AndroidNews';
-import Crypto from './components/Crypto';
 
 const router = createBrowserRouter([
   {
@@ -21,7 +19,15 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <News />,
+        element: <News exact />,
+      },
+      {
+        path: "/android",
+        element: <News exact key={"android"} type="android" />,
+      },
+      {
+        path: "/crypto",
+        element: <News exact key={"crypto"} type="crypto"  />,
       },
       {
         path: "/about",
@@ -30,14 +36,6 @@ const router = createBrowserRouter([
       {
         path: "/blog",
         element: <Blog />,
-      },
-      {
-        path: "/android",
-        element: <AndroidNews />,
-      },
-      {
-        path: "/crypto",
-        element: <Crypto />,
       }
     ]
   }
