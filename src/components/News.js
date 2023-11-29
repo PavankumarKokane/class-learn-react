@@ -10,14 +10,15 @@ export default class News extends Component {
       page: 1,
       totalResults: 0,
       loadingProgress: 0,
-      type: props.type ? props.type : "general"
+      type: props.type ? props.type : "general",
+      newsApiKey: process.env.REACT_APP_NEWS_API
     };
   }
 
   async componentDidMount() {
     this.loadingBar.continuousStart(5,5);
     let url =
-      `https://newsapi.org/v2/everything?q=${this.state.type}&apiKey=8dee27e421e249e3a3e6678f7681c4a8&pageSize=12&page=${this.state.page}`;
+      `https://newsapi.org/v2/everything?q=${this.state.type}&apiKey=${this.state.newsApiKey}&pageSize=12&page=${this.state.page}`;
     let data = await fetch(url);
     let parsedata = await data.json();
     this.setState({ articles: parsedata.articles, totalResults: parsedata.totalResults });
@@ -35,7 +36,7 @@ export default class News extends Component {
   getData = async (nopage) => {
       this.loadingBar.continuousStart(5,5);
       let url =
-      `https://newsapi.org/v2/everything?q=${this.state.type}&apiKey=8dee27e421e249e3a3e6678f7681c4a8&pageSize=12&page=${this.state.page}`;
+      `https://newsapi.org/v2/everything?q=${this.state.type}&apiKey=${this.state.newsApiKey}&pageSize=12&page=${nopage}`;
       let data = await fetch(url);
       let parsedata = await data.json();
       this.setState({ articles: parsedata.articles, totalResults: parsedata.totalResults,page: nopage });
