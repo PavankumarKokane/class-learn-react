@@ -1,61 +1,58 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import NewItem from "./NewItem";
-import LoadingBar from 'react-top-loading-bar';
 
-export default class News extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      articles: [],
-      page: 1,
-      totalResults: 0,
-      loadingProgress: 0,
-      type: props.type ? props.type : "general",
-      newsApiKey: process.env.REACT_APP_NEWS_API
+const News = (props) => {
+  const [articles, setArticles] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const type = props.type ? props.type : "general";
+  const newsApiKey = process.env.REACT_APP_NEWS_API;
+
+  
+  useEffect(() => {
+    const updateNews = async () => {
+      let url = `https://newsapi.org/v2/everything?q=${type}&apiKey=${newsApiKey}&pageSize=12`;
+      try {
+        let data = await fetch(url);
+        let parsedata = await data.json();
+        setArticles(parsedata.articles);
+        setTotalResults(parsedata.totalResults);
+        console.log("News are loaded");
+      } catch (error) {
+        console.error("Error fetching news:", error);
+      }
     };
-  }
+    updateNews();
+  }, [type, newsApiKey]);
 
-  async componentDidMount() {
-    this.loadingBar.continuousStart(5,5);
-    let url =
-      `https://newsapi.org/v2/everything?q=${this.state.type}&apiKey=${this.state.newsApiKey}&pageSize=12&page=${this.state.page}`;
-    let data = await fetch(url);
-    let parsedata = await data.json();
-    this.setState({ articles: parsedata.articles, totalResults: parsedata.totalResults });
-    this.loadingBar.complete();
-  }
+  const handlerNextClick = () => {
+    getData(page + 1);
+  };
 
-  handlerNextClick = () => {
-    this.getData(this.state.page+1);
-  }
+  const handlerPrevClick = () => {
+    getData(page - 1);
+  };
 
-  handlerPrevClick = () => {  
-    this.getData(this.state.page-1);
-  }
-
-  getData = async (nopage) => {
-      this.loadingBar.continuousStart(5,5);
-      let url =
-      `https://newsapi.org/v2/everything?q=${this.state.type}&apiKey=${this.state.newsApiKey}&pageSize=12&page=${nopage}`;
+  const getData = async (nopage) => {
+    let url = `https://newsapi.org/v2/everything?q=${type}&apiKey=${newsApiKey}&pageSize=12&page=${nopage}`;
+    try {
       let data = await fetch(url);
       let parsedata = await data.json();
-      this.setState({ articles: parsedata.articles, totalResults: parsedata.totalResults,page: nopage });
-      console.log("Get Data For Page" + this.state.page + " totalResults" + this.state.totalResults);
-      this.loadingBar.complete();
-  }
+      setArticles(parsedata.articles);
+      setTotalResults(parsedata.totalResults);
+      setPage(nopage);
+      console.log("Get Data For Page" + page + " totalResults" + totalResults);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    }
+  };
 
-  render() {
-    return (
-      <>
-      <LoadingBar
-        height={3}
-        color="#f00"
-        ref={(ref) => (this.loadingBar = ref)}
-      />
+  return (
+    <>
       <div className="mt-5">
         <div className="container">
           <div className="new-item-list">
-            {this.state.articles.map((article, i) => (
+            {articles.map((article, i) => (
               <div className="news-item" key={i}>
                 <NewItem
                   title={article.title}
@@ -67,12 +64,25 @@ export default class News extends Component {
             ))}
           </div>
           <div className="d-flex justify-content-between mt-5">
-            <button disabled={this.state.page <=1} className="btn btn-primary" onClick={this.handlerPrevClick}>&larr; Prev</button>
-            <button disabled={Math.ceil(this.state.totalResults)/12 <= this.state.page || this.state.page > 5 } className="btn btn-primary" onClick={this.handlerNextClick}>Next &rarr;</button>
+            <button
+              disabled={page <= 1}
+              className="btn btn-primary"
+              onClick={handlerPrevClick}
+            >
+              &larr; Prev
+            </button>
+            <button
+              disabled={Math.ceil(totalResults) / 12 <= page || page > 5}
+              className="btn btn-primary"
+              onClick={handlerNextClick}
+            >
+              Next &rarr;
+            </button>
           </div>
         </div>
       </div>
-      </>
-    );
-  }
-}
+    </>
+  );
+};
+
+export default News;
