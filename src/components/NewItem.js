@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const NewItem = (props) => {
   let { title, description, url, img_url } = props;
@@ -30,6 +31,20 @@ const NewItem = (props) => {
       </div>
     </div>
   );
+};
+
+NewItem.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+  url: PropTypes.string,
+  img_url: PropTypes.string,
+};
+
+NewItem.defaultProps = {
+  title: "Title",
+  description: "Description",
+  url: "/",
+  img_url: "https://via.placeholder.com/375x225",
 };
 
 export default NewItem;
