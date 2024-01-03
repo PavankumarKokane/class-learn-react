@@ -9,21 +9,22 @@ const News = (props) => {
   const newsApiKey = process.env.REACT_APP_NEWS_API;
 
   
+  const updateNews = async () => {
+    let url = `https://newsapi.org/v2/everything?q=${type}&apiKey=${newsApiKey}&pageSize=12`;
+    try {
+      let data = await fetch(url);
+      let parsedata = await data.json();
+      setArticles(parsedata.articles);
+      setTotalResults(parsedata.totalResults);
+      console.log("News are loaded");
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    }
+  };
+
   useEffect(() => {
-    const updateNews = async () => {
-      let url = `https://newsapi.org/v2/everything?q=${type}&apiKey=${newsApiKey}&pageSize=12`;
-      try {
-        let data = await fetch(url);
-        let parsedata = await data.json();
-        setArticles(parsedata.articles);
-        setTotalResults(parsedata.totalResults);
-        console.log("News are loaded");
-      } catch (error) {
-        console.error("Error fetching news:", error);
-      }
-    };
     updateNews();
-  }, [type, newsApiKey]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlerNextClick = () => {
     getData(page + 1);
